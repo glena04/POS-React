@@ -30,18 +30,18 @@ const Cart = () => {
     }
 
 
-    const addItem = (itemName, price) => {
+    const addItem = (name, price) => {
         let tempCart = [...cartList];
         
         // Check if item already exists in the cart
-        const existingItemIndex = tempCart.findIndex(item => item.itemName === itemName);
+        const existingItemIndex = tempCart.findIndex(item => item.name === name);
         
         if (existingItemIndex >= 0) {
             // Item exists, increase quantity
             tempCart[existingItemIndex].quantity += 1;
         } else {
             // Item doesn't exist, add to cart with quantity 1
-            tempCart.push({ itemName, price, quantity: 1 });
+            tempCart.push({ name, price, quantity: 1 });
         }
     
         setCartList(tempCart);
@@ -78,9 +78,9 @@ const Cart = () => {
                   type="button" 
                   key={i} 
                   className="item-box"
-                  onClick={() => addItem(item.itemName, item.price)}
+                  onClick={() => addItem(item.name, item.price)}
                 >
-                  {item.itemName + " - $" + item.price}
+                  {item.name + " - $" + item.price}
                 </button>
               );
             }) : null}
@@ -94,7 +94,7 @@ const Cart = () => {
             return (
                 <li key={i} className="list-group-item">
                     <i className="fa fa-trash pointer" onClick={() => removeCartItem(i)}></i> 
-                    <span className="capitalize">{cartItem.itemName}</span> 
+                    <span className="capitalize">{cartItem.name}</span> 
                     <span> x {cartItem.quantity}</span> {/* Display the quantity */}
                 </li>
             );

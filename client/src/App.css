@@ -43,3 +43,16 @@
   font-weight: bold;
 }
 
+.AdminPage {
+
+  color: #4caf50;
+  background-color: rgb(6, 126, 126);
+}
+
+.Body {
+  background-color: hsl(0, 76%, 48%);
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px;
+}
+

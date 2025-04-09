@@ -43,7 +43,7 @@ const AdminPage = () => {
     };
 
     return (
-        <div>
+        <div className='AdminPage'>
             <h1>Admin Page</h1>
             <div>
                 <input
@@ -63,10 +63,10 @@ const AdminPage = () => {
             <h2>Products</h2>
             <ul>
                 {products.map((product) => (
-                    <li key={product.id}>
-                        {product.name} - ${product.price}
-                        <button onClick={() => deleteProduct(product.id)}>Delete</button>
-                    </li>
+                    <li key={product.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>{product.name} - ${product.price}</span>
+                    <button onClick={() => deleteProduct(product.id)}>Delete</button>
+                </li>
                 ))}
             </ul>
         </div>
