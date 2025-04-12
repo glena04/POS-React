@@ -1,5 +1,5 @@
 import React from "react";
-import './App.css';
+import './CSS/App.css';
 import Cart from "./components/Cart";
 import AdminPage from './AdminPage';  // Ensure this path is correct
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
