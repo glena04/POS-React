@@ -12,7 +12,7 @@ const Products = ({ addItem }) => {
                 setItems(response.data);
             })
             .catch(error => {
-                console.error("There was an error fetching the items:", error);
+                console.error("There was an error fetching the items.:", error);
             });
     }, []);
 
