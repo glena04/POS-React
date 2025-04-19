@@ -1,29 +1,15 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import "../CSS/App.css";
 import { calculate } from "../Util";
+import Products from "./Products";
 
 const Cart = () => {
     const [cartList, setCartList] = useState([]);
     const [preTax, setPreTax] = useState(0.00);
-    const [items, setItems] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
     const [showPaymentOptions, setShowPaymentOptions] = useState(false);
     const [receipt, setReceipt] = useState(null);
 
     const tax = 0.08;
-
-    useEffect(() => {
-        axios.get('http://localhost:5000/api/products')
-            .then(response => {
-                setItems(response.data);
-            })
-            .catch(error => {
-                console.error("There was an error fetching the items:", error);
-            });
-    }, []);
-
- 
 
     const addItem = (name, price) => {
         let tempCart = [...cartList];
@@ -50,7 +36,6 @@ const Cart = () => {
         }
     
         setCartList(tempCart);
-      
         setPreTax(calculate(tempCart));
     }
 
@@ -128,37 +113,9 @@ const Cart = () => {
         printWindow.print();
     }
 
-    const filteredItems = items.filter(item => 
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
     return (
         <div className="pos-container">
-            <div className="products-section">
-                <div className="search-bar">
-                    <input 
-                        type="text" 
-                        placeholder="Search products..." 
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                </div>
-                
-                <div className="products-grid">
-                    {filteredItems.length > 0 ? filteredItems.map((item, i) => (
-                        <div 
-                            key={i} 
-                            className="product-card"
-                            onClick={() => addItem(item.name, item.price)}
-                        >
-                            <div className="product-content">
-                                <div className="product-name">{item.name}</div>
-                                <div className="product-price">${item.price.toFixed(2)}</div>
-                            </div>
-                        </div>
-                    )) : <p className="no-products">No products found</p>}
-                </div>
-            </div>
+            <Products addItem={addItem} />
             
             <div className="cart-section">
                 <div className="cart-header">
