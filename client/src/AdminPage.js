@@ -137,8 +137,8 @@ const AdminPage = () => {
                 {products.map((product) => (
                     <li key={product.id} className="product-item">
                         <div className="product-info">
-                            <span className="product-name">{product.name}</span>
-                            <span className="product-price">${product.price.toFixed(2)}</span>
+                            <span className="product-names">{product.name}</span>
+                            <span className="product-prices">${product.price.toFixed(2)}</span>
                         </div>
                         <div className="quantity-control">
                             <span>Stock: </span>
