@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "../CSS/App.css";
 import { calculate } from "../Util";
 import Products from "./Products";
@@ -11,7 +12,7 @@ const Cart = () => {
 
     const tax = 0.08;
 
-    const addItem = (name, price) => {
+    const addItem = (id, name, price) => {
         let tempCart = [...cartList];
         
         const existingItemIndex = tempCart.findIndex(item => item.name === name);
@@ -19,7 +20,7 @@ const Cart = () => {
         if (existingItemIndex >= 0) {
             tempCart[existingItemIndex].quantity += 1;
         } else {
-            tempCart.push({ name, price, quantity: 1 });
+            tempCart.push({ id, name, price, quantity: 1 });
         }
     
         setCartList(tempCart);
@@ -28,10 +29,16 @@ const Cart = () => {
     
     const removeCartItem = (index) => {
         let tempCart = [...cartList];
+        const item = tempCart[index];
         
         if (tempCart[index].quantity > 1) {
             tempCart[index].quantity -= 1;
+            
+            // Increase product stock in database
+            updateProductStock(item.id, 1);
         } else {
+            // Increase product stock in database
+            updateProductStock(item.id, 1);
             tempCart.splice(index, 1);
         }
     
@@ -41,18 +48,63 @@ const Cart = () => {
 
     const increaseQuantity = (index) => {
         let tempCart = [...cartList];
-        tempCart[index].quantity += 1;
-        setCartList(tempCart);
-        setPreTax(calculate(tempCart));
+        const item = tempCart[index];
+        
+        // Check stock availability first
+        axios.get(`http://localhost:5000/api/products/${item.id}`)
+            .then(response => {
+                const product = response.data;
+                
+                if (product.quantity > 0) {
+                    // Update cart
+                    tempCart[index].quantity += 1;
+                    setCartList(tempCart);
+                    setPreTax(calculate(tempCart));
+                    
+                    // Update product stock in database
+                    updateProductStock(item.id, -1);
+                } else {
+                    alert(`Sorry, ${item.name} is out of stock!`);
+                }
+            })
+            .catch(error => {
+                console.error("Error checking product stock:", error);
+            });
+    }
+    
+    const updateProductStock = (productId, change) => {
+        // Get current product quantity
+        axios.get(`http://localhost:5000/api/products/${productId}`)
+            .then(response => {
+                const product = response.data;
+                const newQuantity = product.quantity + change;
+                
+                // Update product quantity
+                axios.put(`http://localhost:5000/api/products/${productId}/quantity`, { 
+                    quantity: newQuantity 
+                })
+                .catch(error => {
+                    console.error("Error updating product quantity:", error);
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching product:", error);
+            });
     }
 
     const clearCart = () => {
+        // Return all items to stock
+        cartList.forEach(item => {
+            updateProductStock(item.id, item.quantity);
+        });
+        
         setCartList([]);
         setPreTax(0);
         setReceipt(null);
     }
 
     const handlePayment = (method) => {
+        // Create receipt data
         const receiptData = {
             items: cartList,
             subtotal: preTax,
@@ -61,6 +113,9 @@ const Cart = () => {
             paymentMethod: method,
             date: new Date().toLocaleString()
         };
+        
+        // Items have already been removed from stock during the cart operations
+        // We don't need to update stock here again, just finalize the transaction
         
         setReceipt(receiptData);
         setShowPaymentOptions(false);
@@ -155,7 +210,7 @@ const Cart = () => {
                         ))
                     ) : (
                         <div className="empty-cart">
-                            <p>Cart is empty.</p>
+                            <p>Cart is empty</p>
                         </div>
                     )}
                 </div>

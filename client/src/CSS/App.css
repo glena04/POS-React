@@ -1,14 +1,11 @@
-/* Cart.css. */
+/* Cart.css */
 
 body {
-  
   margin: 0;
   padding: 0;
   font-family: 'Arial', sans-serif;
   overflow: hidden;
-  
 }
-
 
 .container {
   width: 100% !important;
@@ -18,7 +15,6 @@ body {
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
-
 
 .pos-container {
   display: flex;
@@ -75,14 +71,36 @@ body {
   border-radius: 6px;
   cursor: pointer;
   transition: transform 0.2s;
-  height: 140px; /* Approximately 4x5 cm */
+  height: 140px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
-.product-card:hover {
+.product-card.out-of-stock {
+  background-color: #3a2a2a;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.product-card.out-of-stock::after {
+  content: "OUT OF STOCK";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  background-color: rgba(220, 53, 69, 0.8);
+  color: white;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+.product-card:not(.out-of-stock):hover {
   transform: translateY(-2px);
   background-color: #444;
 }
@@ -105,7 +123,18 @@ body {
 .product-price {
   color: #4CAF50;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 14px;
+}
+
+.product-stock {
+  font-size: 12px;
+  margin-top: 5px;
+  color: #bbb;
+}
+
+.product-stock .no-stock {
+  color: #dc3545;
+  font-weight: bold;
 }
 
 /* Cart Section */
@@ -361,5 +390,3 @@ body {
   padding: 30px;
   color: #c32222;
 }
-
-
