@@ -1,9 +1,10 @@
 import React from "react";
 import './CSS/App.css';
 import Cart from "./components/Cart";
+
 import AdminPage from './AdminPage';  // Ensure this path is correct
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Products from "./components/Products";
+
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Cart/>} />
           <Route path="/admin" element={<AdminPage />} />
+       
         </Routes>
       </div>
     </Router>
