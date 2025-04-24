@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import "../CSS/App.css";
 import { calculate } from "../Util";
 import Products from "./Products";
+import { AuthContext } from "../context/AuthContext";
 
 const Cart = () => {
+    const { currentUser } = useContext(AuthContext);
     const [cartList, setCartList] = useState([]);
     const [preTax, setPreTax] = useState(0.00);
     const [showPaymentOptions, setShowPaymentOptions] = useState(false);
     const [receipt, setReceipt] = useState(null);
 
     const tax = 0.08;
+    const API_URL = process.env.REACT_APP_API_URL;
 
     const addItem = (id, name, price) => {
         let tempCart = [...cartList];
@@ -50,8 +53,8 @@ const Cart = () => {
         let tempCart = [...cartList];
         const item = tempCart[index];
         
-        // Check stock availability first
-        axios.get(`http://localhost:5000/api/products/${item.id}`)
+        // Check stock availability first.
+        axios.get(`${API_URL}/products/${item.id}`)
             .then(response => {
                 const product = response.data;
                 
@@ -74,17 +77,20 @@ const Cart = () => {
     
     const updateProductStock = (productId, change) => {
         // Get current product quantity
-        axios.get(`http://localhost:5000/api/products/${productId}`)
+        axios.get(`${API_URL}/products/${productId}`)
             .then(response => {
                 const product = response.data;
                 const newQuantity = product.quantity + change;
                 
-                // Update product quantity
-                axios.put(`http://localhost:5000/api/products/${productId}/quantity`, { 
+                // Update product quantity with authentication
+                axios.put(`${API_URL}/products/${productId}/quantity`, { 
                     quantity: newQuantity 
                 })
                 .catch(error => {
                     console.error("Error updating product quantity:", error);
+                    if (error.response && error.response.status === 401) {
+                        alert("Your session has expired. Please login again.");
+                    }
                 });
             })
             .catch(error => {
@@ -111,7 +117,8 @@ const Cart = () => {
             tax: preTax * tax,
             total: preTax * (1 + tax),
             paymentMethod: method,
-            date: new Date().toLocaleString()
+            date: new Date().toLocaleString(),
+            cashier: currentUser ? currentUser.username : 'Guest'
         };
         
         // Items have already been removed from stock during the cart operations
@@ -142,6 +149,7 @@ const Cart = () => {
                         <div class="header">
                             <h2>RECEIPT</h2>
                             <p>${receipt.date}</p>
+                            <p>Cashier: ${receipt.cashier}</p>
                         </div>
                         <div class="items">
                             ${receipt.items.map(item => `

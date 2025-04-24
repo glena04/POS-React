@@ -1,22 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import "../CSS/App.css";
+//import { AuthContext } from "../context/AuthContext";
 
 const Products = ({ addItem }) => {
+    // We're not using currentUser directly, so we can remove it from the destructuring
+    //const { } = useContext(AuthContext);
     const [items, setItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const API_URL = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
         fetchProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const fetchProducts = () => {
-        axios.get('http://localhost:5000/api/products')
+        setLoading(true);
+        setError(null);
+        
+        axios.get(`${API_URL}/products`)
             .then(response => {
                 setItems(response.data);
+                setLoading(false);
             })
             .catch(error => {
                 console.error("There was an error fetching the items:", error);
+                setError("Failed to load products. Please try again.");
+                setLoading(false);
             });
     };
 
@@ -31,7 +45,7 @@ const Products = ({ addItem }) => {
         addItem(item.id, item.name, item.price);
         
         // Update the stock quantity in the database
-        axios.put(`http://localhost:5000/api/products/${item.id}/quantity`, { 
+        axios.put(`${API_URL}/products/${item.id}/quantity`, { 
             quantity: item.quantity - 1 
         })
         .then(() => {
@@ -40,12 +54,35 @@ const Products = ({ addItem }) => {
         })
         .catch(error => {
             console.error("Error updating product quantity:", error);
+            if (error.response && error.response.status === 401) {
+                alert("Your session has expired. Please login again.");
+            }
         });
     };
 
     const filteredItems = items.filter(item => 
         item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    if (loading) {
+        return (
+            <div className="products-section loading">
+                <div className="loading-spinner"></div>
+                <p>Loading products...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="products-section error">
+                <p className="error-message">{error}</p>
+                <button onClick={fetchProducts} className="retry-button">
+                    Retry
+                </button>
+            </div>
+        );
+    }
 
     return (
         <div className="products-section">
@@ -56,6 +93,9 @@ const Products = ({ addItem }) => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
+                <button onClick={fetchProducts} className="refresh-button">
+                    Refresh
+                </button>
             </div>
             
             <div className="products-grid">
