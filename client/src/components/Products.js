@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../CSS/App.css";
-//import { AuthContext } from "../context/AuthContext";
+
 
 const Products = ({ addItem }) => {
-    // We're not using currentUser directly, so we can remove it from the destructuring
-    //const { } = useContext(AuthContext);
+    
     const [items, setItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [loading, setLoading] = useState(true);

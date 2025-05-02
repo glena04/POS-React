@@ -1,0 +1,107 @@
+
+    .Body {
+        background-color: #f5f7fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+
+    .info-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f5f7fb;
+        padding: 2rem;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .info-content {
+        background: white;
+        border-radius: 12px;
+        padding: 2.5rem;
+        max-width: 800px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        line-height: 1.6;
+        color: #333;
+    }
+
+    .info-content h2 {
+        color: #2c3e50;
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 3px solid #3498db;
+        padding-bottom: 0.5rem;
+        display: inline-block;
+    }
+
+    .info-content p {
+        margin-bottom: 0.2rem;
+        font-size: 1rem;
+        color: #4a5568;
+    }
+
+    a {
+        color: #007bff; /* or any readable color */
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #0056b3; /* darker on hover */
+        text-decoration: underline;
+    }
+
+    .info-content ul {
+        margin: 1.5rem 0;
+        padding-left: 1.5rem;
+        list-style: none;
+    }
+
+    .info-content li {
+        margin-bottom: 0.1rem;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+
+    .info-content li::before {
+        content: "•";
+        color: #3498db;
+        font-weight: bold;
+        display: inline-block;
+        width: 1em;
+        margin-left: -1.5rem;
+        position: absolute;
+    }
+
+    .contact-info {
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-top: 2rem;
+    }
+
+    .contact-info p {
+        margin: 0.4rem 0;
+        font-size: 0.95rem;
+        color: #4a5568;
+    }
+
+    .contact-info strong {
+        color: #2c3e50;
+        margin-right: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+
+    .info-container {
+        padding: 1rem;
+    }
+
+    .info-content {
+        padding: 1.5rem;
+    }
+
+    .info-content h2 {
+        font-size: 1.8rem;
+    }
+
+    }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import '../CSS/Auth.css';
+import '../CSS/Info.css';
 
 const Info = () => {
     return (
@@ -22,8 +22,10 @@ const Info = () => {
                 <p>
                     For more information, please contact our support team or visit our website.
                     <p> Tel: +491726143430,</p>
-                    <p> Email:info@glesta.net,</p>
-                    <p> Website: www.glesta.net,</p>
+                    <p> Email: info@glesta.net,</p>
+                    <p> Website: <a href="https://www.glesta.net" target="_blank" rel="noopener noreferrer">www.glesta.net</a></p>
+
+
                     <p> Address: Kopernikusstr. 63, Düsseldorf, Germany</p>
                        
                 </p>
