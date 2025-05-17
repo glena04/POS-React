@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './CSS/App.css';
 
@@ -10,18 +10,25 @@ import Info from './components/Info';
 import Navbar from './components/Navbar';
 import Unauthorized from './components/Unauthorized';
 import ProtectedRoute from './components/ProtectedRoute';
-
+import SplashScreen from "./components/SplashScreen";
 // Auth Context
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
   return (
     <AuthProvider>
+        {isLoading && (
+          <SplashScreen onLoadingComplete={() => setIsLoading(false)} />
+        )}
+
+               {!isLoading && <login/>}
       <Router>
         <Navbar />
-        <div className="container">
+        <div className="container"> 
           <Routes>
             {/* Public Routes */}
+           
             <Route path="/login" element={<Login />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
             <Route path="/info" element={<Info />} />
@@ -41,6 +48,7 @@ function App() {
           </Routes>
         </div>
       </Router>
+      
     </AuthProvider>
   );
 }
