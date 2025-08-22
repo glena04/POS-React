@@ -6,7 +6,7 @@ import './CSS/AdminPage.css';
 import { AuthContext } from './context/AuthContext';
 
 const AdminPage = () => {
-    // We're using currentUser but not isAdmin directly
+    // We're using currentUser but not isAdmin directly.
     const { currentUser } = useContext(AuthContext);
     
     // Product state
@@ -44,6 +44,7 @@ const AdminPage = () => {
     useEffect(() => {
         fetchProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+        
     }, []);
 
     // Fetch users from API
@@ -88,6 +89,7 @@ const AdminPage = () => {
     };
 
     // Register a new user
+    
     const registerUser = async (e) => {
         e.preventDefault();
         const { username, email, password, confirmPassword, role } = userFormData;
@@ -112,7 +114,7 @@ const AdminPage = () => {
             setUserFormError('');
             setLoadingUsers(true);
             
-            // Use the register function from AuthContext but don't login as the new user
+            // Use the register function from AuthContext but don't login as the new user.
             await axios.post(`${API_URL}/auth/register`, { 
                 username, 
                 email, 
