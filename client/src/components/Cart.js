@@ -121,8 +121,8 @@ const Cart = () => {
             cashier: currentUser ? currentUser.username : 'Guest'
         };
         
-        // Items have already been removed from stock during the cart operations
-        // We don't need to update stock here again, just finalize the transaction
+        // Items have already been removed from stock during the cart operations.
+        // We don't need to update stock here again, just finalize the transaction.
         
         setReceipt(receiptData);
         setShowPaymentOptions(false);
